@@ -66,15 +66,17 @@ def product_details(request, *args, **kwargs):
     return HttpResponse(template.render(context))
 
 #psql -h localhost -U postgres
+#\connect zimply;
 
 @api_view(['POST'])
 @csrf_exempt
 def add_product(request):
     if request.method == 'POST':
+        import pdb;pdb.set_trace()
     	product = {}
         product['name'] = request.data.get('pr_name')
         #product['image'] = 'images/%s' % (request.data.get('docfile'),)
-        product['image'] = request.data.get('docfile')
+        product['image'] = str(request.data.get('docfile'))
         product['price'] = request.data.get('pr_price')
         product['category_id'] = int(request.data.get('pr_category'))
         product['dimensions'] = request.data.get('pr_dimension').split(',')

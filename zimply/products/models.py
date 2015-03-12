@@ -20,7 +20,7 @@ class Seller(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=200)
-    image = models.ImageField(upload_to="images/", null=True, blank=True, max_length=500)
+    image = models.ImageField(upload_to="static/images/", null=True, blank=True, max_length=500)
     price = models.DecimalField(max_digits=7, decimal_places=2, default=0.0)
     category = models.ForeignKey(Category)
     dimensions = ArrayField(models.CharField(max_length=200), null=True, blank=True)
