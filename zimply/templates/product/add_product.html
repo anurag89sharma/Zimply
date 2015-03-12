@@ -1,0 +1,45 @@
+<form action="/api/add-product/" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+	<h1>Enter Product Details:<h1>
+		<h4>Enter Product Name:<h4>
+		<input type="text" name="pr_name" placeholder="Product Name"><br>
+		<h4>Upload Product Image:<h4>
+		<!--<input type="text" name="pr_name" placeholder="Product Image"><br>-->
+		<p>
+				{{ form.docfile.errors }}
+				{{ form.docfile }}
+		</p>
+
+		<h4>Enter Product Price:<h4>
+		<input type="text" name="pr_price" placeholder="Product Price"><br>
+		
+		<h4>Select Product Category:<h4>
+		<select name="pr_category">
+			<option value="-1">Select Category</option>	
+			{% for items in categories %}
+	  		<option value="{{items.0}}">{{items.1}}</option>
+	  		{% endfor %}
+		</select>
+
+		<h4>Enter Product Dimension:<h4>
+		<input type="text" name="pr_dimension" placeholder="Product Dimension"><br>
+		
+		<h4>Seect Product Shipping Details:<h4>
+        <select name="pr_ship_details">
+        	<option value="-1">Shipping Details</option>
+			{% for items in shipping_details %}
+	  		<option value="{{items.0}}">{{items.1}}</option>
+	  		{% endfor %}
+		</select>		
+		
+		<h4>Select Seller:<h4>
+		<select name="pr_seller">
+			<option value="-1">Select Seller</option>
+			{% for items in seller %}
+	  		<option value="{{items.0}}">{{items.1}}</option>
+	  		{% endfor %}
+		</select>			
+		
+	<br><br>
+	<input type="submit" value="Submit">
+</form>

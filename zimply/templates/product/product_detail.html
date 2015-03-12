@@ -1,0 +1,13 @@
+{% load staticfiles %}
+{% for items in products %}
+	<h4>Product Name: {{items.name}}<h4>
+	<h4>Product Price: {{items.price}}<h4>
+	<h4>Product Image: {{items.image}}<h4>
+		<img src="{% static items.image %}">
+	<h4>Product Dimensions: {{items.dimensions}}<h4>
+	<h4>Product Category: {{items.category__name}}<h4>	
+	<h4>Product Shipping Details: {{items.shipping_details}}<h4>	
+	<h4>Product Sold By: {{items.sold_by__name}}<h4>
+    <button type="button">Add to Cart</button>		
+    <button type="button">Remove from Cart</button>		
+{% endfor %}

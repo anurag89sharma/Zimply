@@ -1,0 +1,9 @@
+{% load staticfiles %}
+{% for items in products %}
+	<h4>Product Name: {{items.name}}<h4>
+	<h4>Product Price: {{items.price}}<h4>
+	<h4>Product Image: {{items.image}}<h4>
+		<img src="{% static items.image %}">
+	<h4>Product Dimensions: {{items.dimensions}}<h4>
+	<h4>View Details:<a href="/product/{{items.id}}/">Click Here</a> <h4><br><br>	
+{% endfor %}
