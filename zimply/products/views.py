@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.template.response import TemplateResponse
 from django.shortcuts import render
 from django.core.files.base import ContentFile
+from cart.models import cart
 from models import Product, Category, Seller, shipping
 from django.db.models import Q
 from decimal import *
@@ -54,6 +55,11 @@ def view_products(request):
 def product_details(request, *args, **kwargs):
     product_id = kwargs.get('id')
     products = Product.objects.filter(id=product_id).values('id','name','price','image','dimensions','category__name','shipping_details','sold_by__name')
+    obj = cart.objects.filter(user=request.user, cart_details__contains=[product_id])
+    if obj.exists():
+        data = {'remove_flag':1}
+    else:    
+        data = {'remove_flag':0}
     for product in products:
         product['price'] = str(product['price'])
         product['dimensions'] = ' x '.join(product['dimensions'])
@@ -62,6 +68,7 @@ def product_details(request, *args, **kwargs):
     template = loader.get_template('product/product_detail.html')
     context = RequestContext(request, {
         'products' : products,
+        'added_to_cart' : data,
     })
     return HttpResponse(template.render(context))
 
@@ -72,10 +79,9 @@ def product_details(request, *args, **kwargs):
 @csrf_exempt
 def add_product(request):
     if request.method == 'POST':
-        import pdb;pdb.set_trace()
+        #import pdb;pdb.set_trace()
     	product = {}
         product['name'] = request.data.get('pr_name')
-        #product['image'] = 'images/%s' % (request.data.get('docfile'),)
         product['image'] = str(request.data.get('docfile'))
         product['price'] = request.data.get('pr_price')
         product['category_id'] = int(request.data.get('pr_category'))
@@ -95,7 +101,7 @@ def add_product(request):
                         fout.write(chunks)
                     fout.close()
         except:
-            return HttpResponse(json.dumps("Error Saving the File"))	
+            return HttpResponse(json.dumps("Error Saving the File. Please Re-try!!!"))	
 
     Product.objects.create(**product)   
     template = loader.get_template('product/homepage.html')

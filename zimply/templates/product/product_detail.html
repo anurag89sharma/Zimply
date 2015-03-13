@@ -1,4 +1,73 @@
 {% load staticfiles %}
+
+<script src="{% static 'js/'%}jquery.min.js"></script>
+<script>
+$(document).ready(function () {
+
+	if({{added_to_cart.remove_flag}} == 1){
+		$("#remove-cart").show();
+		$("#view-cart").show();
+
+	}
+
+});
+
+	function add_to_cart(product_id){
+		//alert(product_id);
+		$.ajax({
+        	type: "POST",
+        	async:true,
+        	url: '/api/add-to-cart/',
+        	data:{
+        		'product_id': product_id,
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+            },
+        	success:function(data){
+        		data = JSON.parse(data);
+        		if(data["remove_flag"] == 1){
+                    $("#remove-cart").show();
+                    $("#view-cart").show();
+        		}
+        	},
+        	error:function(){
+            	console.log('could not fetch user data');
+
+        	}
+    	});
+	};
+
+	function remove_from_cart(product_id){
+		$.ajax({
+        	type: "POST",
+        	async:true,
+        	url: '/api/remove-from-cart/',
+        	data:{
+        		'product_id': product_id,
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+            },
+        	success:function(data){
+        		data = JSON.parse(data);
+        		if(data["remove_flag"] == 1){
+                    $("#remove-cart").show();
+                    $("#view-cart").show();
+        		}
+        		else{
+        		    $("#remove-cart").hide();	
+        		    $("#view-cart").hide();
+        		}
+        	},
+        	error:function(){
+            	console.log('could not fetch user data');
+        	}
+    	});
+    }
+
+</script>
+
+<div id="view-cart" style="display: none;">
+	<h3>View My Cart:<h3> <a href="/view-cart/">Click Here</a>
+</div>
+
 {% for items in products %}
 	<h4>Product Name: {{items.name}}<h4>
 	<h4>Product Price: {{items.price}}<h4>
@@ -8,5 +77,6 @@
 	<h4>Product Category: {{items.category__name}}<h4>	
 	<h4>Product Shipping Details: {{items.shipping_details}}<h4>	
 	<h4>Product Sold By: {{items.sold_by__name}}<h4>
-    <button type="button">Add to Cart</button>		
+    <button id="add-cart" type="button" onclick="add_to_cart({{items.id}})">Add to Cart</button>		
+    <button id="remove-cart" type="button" style="display: none;" onclick="remove_from_cart({{items.id}})">Remove from Cart</button>		
 {% endfor %}

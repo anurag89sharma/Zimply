@@ -1,0 +1,14 @@
+{% load staticfiles %}
+
+<h2>Total price of all the items: {{total_price}}<h2>
+
+{% for items in products %}
+	<h4>Product Name: {{items.name}}<h4>
+	<h4>Product Price: {{items.price}}<h4>
+	<h4>Product Image: {{items.image}}<h4>
+		<img src="{% static 'images/'%}{{items.image }}">
+	<h4>Product Dimensions: {{items.dimensions}}<h4>
+	<h4>Quantity Ordered: {{items.total_quantity}}<h4>	
+	<h4>Total Price for this item: {{items.total_item_price}}<h4>		
+	<h4>View Details:<a href="/product/{{items.id}}/">Click Here</a> <h4><br><br>	
+{% endfor %}
