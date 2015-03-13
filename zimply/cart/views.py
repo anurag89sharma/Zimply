@@ -34,7 +34,7 @@ def remove_from_cart(request):
         obj = cart.objects.filter(user=request.user, cart_details__contains=[product_id])
         #import pdb;pdb.set_trace();
         if obj.exists():
-        	# Just a Hack ....... not able to update the postgres array field
+            # Just a Hack ....... not able to update the postgres array field
             tmp_list = obj[0].cart_details
             tmp_list.remove(str(product_id))
             obj[0].delete()
