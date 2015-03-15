@@ -30,18 +30,22 @@ def add_to_cart(request):
 @api_view(['POST'])
 def remove_from_cart(request):
     if request.method == 'POST':
-        product_id = request.data.get('product_id')
+        product_id = str(request.data.get('product_id'))
         obj = cart.objects.filter(user=request.user, cart_details__contains=[product_id])
         #import pdb;pdb.set_trace();
         if obj.exists():
-            # Just a Hack ....... not able to update the postgres array field
-            tmp_list = obj[0].cart_details
-            tmp_list.remove(str(product_id))
-            obj[0].delete()
-            cart_object, created = cart.objects.get_or_create(user=request.user)
-            cart_object.cart_details = tmp_list
+            # This didnt work....
+            #obj[0].cart_details.remove(product_id)
+            #obj[0].save()
+            #print obj[0].cart_details
+
+            # This works....
+            cart_object = obj[0]
+            cart_object.cart_details.remove(product_id)
             cart_object.save()
-            if product_id in tmp_list:
+            #print cart_object.cart_details
+
+            if product_id in cart_object.cart_details:
                 data = {'remove_flag':1}
             else:
                 data = {'remove_flag':0}
