@@ -15,11 +15,13 @@ from decimal import *
 from django.template import RequestContext, loader
 from rest_framework.decorators import api_view
 from forms import DocumentForm
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 import os
 path = os.path.join(settings.BASE_DIR, 'static/images').replace('\\', '/')
 
+@login_required(login_url='/admin/')
 def homepage(request):
     template = loader.get_template('product/homepage.html')
     context = RequestContext(request, { })
