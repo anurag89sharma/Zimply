@@ -72,6 +72,5 @@ def view_cart(request):
         })
         return HttpResponse(template.render(context))
     else:
-        return HttpResponse(json.dumps("Please login first to view your cart details"))
-
+        return HttpResponse(json.dumps("Please login first or add items to your cart to view your cart details"))
 
